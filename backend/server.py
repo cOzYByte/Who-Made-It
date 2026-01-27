@@ -45,6 +45,16 @@ class GlobalStats(BaseModel):
     total_queries: int = 0
     men_count: int = 0
     women_count: int = 0
+    milestones: List[int] = []
+
+
+class Milestone(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    count: int
+    achieved_at: datetime
+    men_at_milestone: int
+    women_at_milestone: int
 
 
 class CategoryStats(BaseModel):
