@@ -1,0 +1,125 @@
+{
+  "identity": {
+    "name": "E1: The Anti-AI Designer",
+    "mission": "Create a Neo-Brutalist, high-contrast invention checker that breaks gender stereotypes through bold abstraction.",
+    "vibe": "Modern Minimal x Pop Art. Think 'Swiss Poster meets Data Viz'.",
+    "principles": [
+      "Fusion over Imitation: Mix Swiss Design precision with Pop Art vibrancy.",
+      "Emotion First: The reveal of 'Man' or 'Woman' should feel like a game show moment.",
+      "Content is King: The data (Scoreboard) is the hero.",
+      "Contrast: Stark Black/White base with aggressive Blue/Orange accents."
+    ]
+  },
+  "typography": {
+    "primary_font": "Syne",
+    "secondary_font": "Outfit",
+    "installation": "Import from Google Fonts: @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap');",
+    "usage": {
+      "headings": "font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: -0.02em;",
+      "body": "font-family: 'Outfit', sans-serif; font-weight: 400;",
+      "ui_elements": "font-family: 'Outfit', sans-serif; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;"
+    },
+    "scale": {
+      "h1": "text-6xl md:text-8xl lg:text-9xl",
+      "h2": "text-4xl md:text-6xl",
+      "body": "text-lg md:text-xl"
+    }
+  },
+  "colors": {
+    "theme_strategy": "Neo-Brutalist High Contrast",
+    "palette": {
+      "light": {
+        "background": "#F4F4F0",
+        "foreground": "#050505",
+        "card": "#FFFFFF",
+        "card_foreground": "#050505",
+        "primary": "#050505",
+        "primary_foreground": "#FFFFFF",
+        "border": "#050505"
+      },
+      "dark": {
+        "background": "#050505",
+        "foreground": "#F4F4F0",
+        "card": "#121212",
+        "card_foreground": "#F4F4F0",
+        "primary": "#F4F4F0",
+        "primary_foreground": "#050505",
+        "border": "#333333"
+      },
+      "accents": {
+        "man": "#002FA7",
+        "woman": "#FF4500",
+        "neutral": "#808080",
+        "success": "#00C853",
+        "error": "#FF0000"
+      }
+    },
+    "gradients": "NONE. Use solid blocks of color."
+  },
+  "layout": {
+    "grid_system": "The Bento Grid (Mode A)",
+    "spacing": "Generous. Use p-8 to p-12 for containers.",
+    "container_style": "Sharp edges (rounded-none) or minimal radius (rounded-sm). Thick borders (border-2 or border-4).",
+    "alignment": "Asymmetrical. Do not center everything. Offset the input field or the scoreboard."
+  },
+  "components": {
+    "Input": {
+      "style": "Massive text size (text-4xl). Transparent background. Thick bottom border only (border-b-4). No focus ring, just border color change.",
+      "animation": "Transition border color on focus."
+    },
+    "Button": {
+      "style": "Solid rectangle. rounded-none. Uppercase text. Hover: Invert colors (bg-black text-white -> bg-white text-black).",
+      "interaction": "Scale down slightly on click (active:scale-95)."
+    },
+    "Card": {
+      "style": "Flat. Border-2 border-black (light mode) / border-white (dark mode). No shadow, or hard shadow (shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]).",
+      "usage": "Result display, History items."
+    },
+    "Scoreboard": {
+      "style": "Ticker tape style or massive split-screen numbers.",
+      "library": "react-countup for number animation."
+    }
+  },
+  "visual_enhancers": {
+    "textures": "Add a subtle noise overlay to the background to kill the digital flatness.",
+    "motion": "Use framer-motion for the 'Reveal'. When the gender is detected, the screen should flash or the background color should shift to the accent color (Blue/Orange) for a split second.",
+    "3d_elements": "Use abstract 3D shapes floating in the background (blurred) to add depth.",
+    "icons": "Phosphor Icons (Bold weight)."
+  },
+  "image_urls": {
+    "hero_backgrounds": [
+      {
+        "url": "https://images.unsplash.com/photo-1766430919536-067f04e1d4b9?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "description": "Abstract colorful wavy patterns (Yellow/Blue)",
+        "category": "background"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1759262692717-1fa866e319e5?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "description": "Abstract wavy pattern (Pink/Cyan)",
+        "category": "background"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1759266823522-54a3a6893206?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "description": "Vibrant swirling colors",
+        "category": "background"
+      }
+    ]
+  },
+  "instructions_to_main_agent": {
+    "step_1": "Install dependencies: `npm install framer-motion react-countup clsx tailwind-merge @phosphor-icons/react`.",
+    "step_2": "Update `tailwind.config.js` to include the new colors (man: #002FA7, woman: #FF4500) and fonts (Syne, Outfit).",
+    "step_3": "Create a `Layout` component that applies the noise texture and global font styles.",
+    "step_4": "Build the `Scoreboard` component using a split-screen design (Left: Man, Right: Woman) that updates in real-time.",
+    "step_5": "Build the `SearchInput` component as a massive, central element.",
+    "step_6": "Implement the 'Reveal' animation. When result comes back, animate the background color or show a massive overlay.",
+    "step_7": "Ensure `data-testid` is added to all interactive elements."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use gradients. Use solid, bold colors.",
+    "Do not use rounded corners > 4px. Prefer sharp edges.",
+    "Typography must be HUGE. Don't be afraid of 10rem headings.",
+    "Animations should be snappy (0.2s - 0.3s), not floaty.",
+    "Use `sonner` for toasts.",
+    "Ensure dark mode is the 'cool' mode, not just an inverted mode."
+  ]
+}
