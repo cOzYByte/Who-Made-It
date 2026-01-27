@@ -59,7 +59,7 @@ function App() {
     }
 
     setLoading(true);
-    const oldMilestones = stats.milestones || [];
+    const oldTotal = stats.total_queries;
     
     try {
       const response = await axios.post(`${API}/analyze`, { input_text: inputText });
@@ -71,14 +71,15 @@ function App() {
       await fetchStats();
       fetchCategories();
       fetchRecentQueries();
-      fetchMilestones();
       
       // Check if we hit a new milestone
       const newStats = await axios.get(`${API}/stats`);
-      const newMilestones = newStats.data.milestones || [];
-      if (newMilestones.length > oldMilestones.length) {
-        const latestMilestone = newMilestones[newMilestones.length - 1];
-        toast.success(`🎉 MILESTONE ACHIEVED: ${latestMilestone.toLocaleString()} queries!`, {
+      const newTotal = newStats.data.total_queries;
+      const oldMilestone = Math.floor(oldTotal / 100000) * 100000;
+      const newMilestone = Math.floor(newTotal / 100000) * 100000;
+      
+      if (newMilestone > oldMilestone && newMilestone > 0) {
+        toast.success(`🎉 MILESTONE ACHIEVED: ${newMilestone.toLocaleString()} queries!`, {
           duration: 5000,
         });
       }
