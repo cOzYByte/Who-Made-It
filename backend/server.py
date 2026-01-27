@@ -114,11 +114,12 @@ async def analyze_invention(query: QueryInput):
             explanation=explanation
         )
         
-        doc = query_result.model_dump()
-        doc['timestamp'] = doc['timestamp'].isoformat()
-        await db.queries.insert_one(doc)
-        
+        # Only save to database if it's an invention by man or woman (not natural things)
         if result in ['man', 'woman']:
+            doc = query_result.model_dump()
+            doc['timestamp'] = doc['timestamp'].isoformat()
+            await db.queries.insert_one(doc)
+            
             stats = await db.stats.find_one({"type": "global"}, {"_id": 0})
             if not stats:
                 stats = {"type": "global", "total_queries": 0, "men_count": 0, "women_count": 0}
