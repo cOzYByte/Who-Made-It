@@ -1,0 +1,64 @@
+{
+  "summary": {
+    "total_tests": 9,
+    "passed_tests": 9,
+    "success_rate": 100.0,
+    "timestamp": "2026-01-27T04:43:36.463097"
+  },
+  "detailed_results": [
+    {
+      "test": "Root endpoint",
+      "success": true,
+      "details": "Status: 200, Message: Inventor Gender Checker API",
+      "timestamp": "2026-01-27T04:43:27.432201"
+    },
+    {
+      "test": "Analyze endpoint (iPhone)",
+      "success": true,
+      "details": "Status: 200, Result: man, Creator: Steve Jobs, Category: Technology",
+      "timestamp": "2026-01-27T04:43:29.651812"
+    },
+    {
+      "test": "Stats endpoint",
+      "success": true,
+      "details": "Status: 200, Total: 1, Men: 1, Women: 0",
+      "timestamp": "2026-01-27T04:43:29.691947"
+    },
+    {
+      "test": "Queries endpoint",
+      "success": true,
+      "details": "Status: 200, Returned 1 queries",
+      "timestamp": "2026-01-27T04:43:29.731098"
+    },
+    {
+      "test": "Categories endpoint",
+      "success": true,
+      "details": "Status: 200, Returned 1 categories",
+      "timestamp": "2026-01-27T04:43:29.766698"
+    },
+    {
+      "test": "Analyze endpoint (Radium)",
+      "success": true,
+      "details": "Status: 200, Result: woman, Creator: Marie Sk\u0142odowska Curie, Category: Science",
+      "timestamp": "2026-01-27T04:43:31.579835"
+    },
+    {
+      "test": "Analyze endpoint (Telephone)",
+      "success": true,
+      "details": "Status: 200, Result: man, Creator: Alexander Graham Bell, Category: Technology",
+      "timestamp": "2026-01-27T04:43:33.027034"
+    },
+    {
+      "test": "Analyze endpoint (DNA Structure)",
+      "success": true,
+      "details": "Status: 200, Result: unknown, Creator: James Watson and Francis Crick, Category: Science",
+      "timestamp": "2026-01-27T04:43:34.689361"
+    },
+    {
+      "test": "Analyze endpoint (Computer Programming)",
+      "success": true,
+      "details": "Status: 200, Result: woman, Creator: Ada Lovelace, Category: Technology",
+      "timestamp": "2026-01-27T04:43:36.462141"
+    }
+  ]
+}
