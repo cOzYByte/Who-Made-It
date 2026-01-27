@@ -133,13 +133,32 @@ async def analyze_invention(query: QueryInput):
             
             stats = await db.stats.find_one({"type": "global"}, {"_id": 0})
             if not stats:
-                stats = {"type": "global", "total_queries": 0, "men_count": 0, "women_count": 0}
+                stats = {"type": "global", "total_queries": 0, "men_count": 0, "women_count": 0, "milestones": []}
             
+            old_count = stats['total_queries']
             stats['total_queries'] += 1
             if result == 'man':
                 stats['men_count'] += 1
             elif result == 'woman':
                 stats['women_count'] += 1
+            
+            # Check if we've hit a milestone (every 100,000 queries)
+            new_count = stats['total_queries']
+            old_milestone = (old_count // 100000) * 100000
+            new_milestone = (new_count // 100000) * 100000
+            
+            if new_milestone > old_milestone and new_milestone > 0:
+                # We've hit a new milestone!
+                milestone_doc = {
+                    "count": new_milestone,
+                    "achieved_at": datetime.now(timezone.utc).isoformat(),
+                    "men_at_milestone": stats['men_count'],
+                    "women_at_milestone": stats['women_count']
+                }
+                await db.milestones.insert_one(milestone_doc)
+                if 'milestones' not in stats:
+                    stats['milestones'] = []
+                stats['milestones'].append(new_milestone)
             
             await db.stats.update_one(
                 {"type": "global"},
