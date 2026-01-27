@@ -82,9 +82,10 @@ async def analyze_invention(query: QueryInput):
             }
             
             IMPORTANT: 
-            - If the item is a natural phenomenon, natural resource, or something found in nature (not invented/created by humans), use "natural" for result.
-            - If multiple people were involved, mention the primary inventor/creator.
-            - If the gender cannot be determined or it's a collective work, use "unknown" for result."""
+            - If the item is a natural phenomenon, natural resource, plant, animal, mineral, element, or ANYTHING found in nature (not invented/created by humans), use "natural" for result. Examples: water, oxygen, trees, gold, diamonds, berries, sunlight, wind, etc.
+            - Only use "man" or "woman" for human-made inventions, products, or creations.
+            - If multiple people were involved, mention the primary inventor/creator and still use "man" or "woman" based on their gender.
+            - If the gender cannot be determined, default to "natural" if it's from nature, otherwise use the best guess based on historical records."""
         ).with_model("openai", "gpt-5.2")
         
         user_message = UserMessage(
