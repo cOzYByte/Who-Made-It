@@ -1,34 +1,60 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+.massive-input {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 3rem;
+  background: transparent;
+  border: none;
+  border-bottom: 4px solid currentColor;
+  outline: none;
+  width: 100%;
+  padding: 1rem 0;
+  transition: border-color 0.2s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.massive-input:focus {
+  border-color: #002FA7;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.massive-input::placeholder {
+  opacity: 0.3;
 }
 
-.App-link {
-    color: #61dafb;
+.brutalist-card {
+  border: 2px solid currentColor;
+  border-radius: 0;
+  box-shadow: 4px 4px 0px 0px currentColor;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.brutalist-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px currentColor;
+}
+
+.brutalist-button {
+  border: 2px solid currentColor;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: 1rem 2rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.brutalist-button:hover {
+  background: currentColor;
+  color: var(--background);
+}
+
+.brutalist-button:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .massive-input {
+    font-size: 2rem;
+  }
 }
