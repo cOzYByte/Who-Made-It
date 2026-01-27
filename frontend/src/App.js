@@ -3,7 +3,7 @@ import "@/App.css";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
-import { MagnifyingGlass, Lightbulb, TrendUp, Lightning } from "@phosphor-icons/react";
+import { MagnifyingGlass, Lightbulb, TrendUp, Lightning, Trophy } from "@phosphor-icons/react";
 import { toast, Toaster } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -13,9 +13,10 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-  const [stats, setStats] = useState({ total_queries: 0, men_count: 0, women_count: 0 });
+  const [stats, setStats] = useState({ total_queries: 0, men_count: 0, women_count: 0, milestones: [] });
   const [categories, setCategories] = useState([]);
   const [recentQueries, setRecentQueries] = useState([]);
+  const [milestones, setMilestones] = useState([]);
   const [showFlash, setShowFlash] = useState(false);
 
   useEffect(() => {
