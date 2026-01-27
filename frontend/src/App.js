@@ -23,6 +23,7 @@ function App() {
     fetchStats();
     fetchCategories();
     fetchRecentQueries();
+    fetchMilestones();
   }, []);
 
   const fetchStats = async () => {
@@ -49,6 +50,15 @@ function App() {
       setRecentQueries(response.data);
     } catch (error) {
       console.error("Error fetching recent queries:", error);
+    }
+  };
+
+  const fetchMilestones = async () => {
+    try {
+      const response = await axios.get(`${API}/milestones`);
+      setMilestones(response.data);
+    } catch (error) {
+      console.error("Error fetching milestones:", error);
     }
   };
 
