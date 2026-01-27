@@ -70,6 +70,8 @@ function App() {
     }
 
     setLoading(true);
+    const oldMilestones = stats.milestones || [];
+    
     try {
       const response = await axios.post(`${API}/analyze`, { input_text: inputText });
       setResult(response.data);
@@ -77,9 +79,20 @@ function App() {
       setShowFlash(true);
       setTimeout(() => setShowFlash(false), 300);
       
-      fetchStats();
+      await fetchStats();
       fetchCategories();
       fetchRecentQueries();
+      fetchMilestones();
+      
+      // Check if we hit a new milestone
+      const newStats = await axios.get(`${API}/stats`);
+      const newMilestones = newStats.data.milestones || [];
+      if (newMilestones.length > oldMilestones.length) {
+        const latestMilestone = newMilestones[newMilestones.length - 1];
+        toast.success(`🎉 MILESTONE ACHIEVED: ${latestMilestone.toLocaleString()} queries!`, {
+          duration: 5000,
+        });
+      }
       
       toast.success("Analysis complete!");
     } catch (error) {
