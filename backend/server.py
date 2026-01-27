@@ -232,6 +232,29 @@ async def get_categories():
     return sorted(category_stats, key=lambda x: x.count, reverse=True)
 
 
+@api_router.get("/milestones", response_model=List[Milestone])
+async def get_milestones():
+    milestones = await db.milestones.find({}, {"_id": 0}).sort("count", -1).to_list(100)
+    
+    for milestone in milestones:
+        if isinstance(milestone.get('achieved_at'), str):
+            milestone['achieved_at'] = datetime.fromisoformat(milestone['achieved_at'])
+    
+    return milestones
+    
+    category_stats = [
+        CategoryStats(
+            category=cat,
+            count=stats['count'],
+            men_count=stats['men_count'],
+            women_count=stats['women_count']
+        )
+        for cat, stats in category_map.items()
+    ]
+    
+    return sorted(category_stats, key=lambda x: x.count, reverse=True)
+
+
 app.include_router(api_router)
 
 app.add_middleware(
