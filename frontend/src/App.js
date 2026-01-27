@@ -350,72 +350,54 @@ function App() {
               </motion.div>
             )}
 
-            {stats.milestones && stats.milestones.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.35 }}
-                className="brutalist-card bg-card p-8"
-                data-testid="milestones-card"
-              >
-                <div className="flex items-center gap-2 mb-6">
-                  <Trophy size={24} weight="bold" />
-                  <h3 className="font-syne font-bold text-2xl">MILESTONES</h3>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35 }}
+              className="brutalist-card bg-card p-8"
+              data-testid="milestone-card"
+            >
+              <div className="flex items-center gap-2 mb-6">
+                <Trophy size={24} weight="bold" />
+                <h3 className="font-syne font-bold text-2xl">MILESTONE</h3>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="text-sm font-outfit uppercase tracking-wider text-muted-foreground mb-2">
+                    Next Goal
+                  </div>
+                  <div className="font-syne font-bold text-5xl" style={{ color: '#FFA500' }}>
+                    <CountUp end={(Math.floor(stats.total_queries / 100000) + 1) * 100000} duration={1} separator="," />
+                  </div>
                 </div>
                 
-                <div className="space-y-4">
-                  {milestones.slice(0, 5).map((milestone, index) => {
-                    const menPerc = milestone.men_at_milestone + milestone.women_at_milestone > 0 
-                      ? Math.round((milestone.men_at_milestone / (milestone.men_at_milestone + milestone.women_at_milestone)) * 100)
-                      : 0;
-                    const womenPerc = 100 - menPerc;
-                    
-                    return (
-                      <div key={index} className="space-y-2 p-4 border-2 border-current rounded-none" data-testid={`milestone-${index}`}>
-                        <div className="flex justify-between items-baseline">
-                          <div className="font-syne font-bold text-2xl" style={{ color: '#FFA500' }}>
-                            {milestone.count.toLocaleString()}
-                          </div>
-                          <div className="text-xs font-outfit text-muted-foreground">
-                            {new Date(milestone.achieved_at).toLocaleDateString()}
-                          </div>
-                        </div>
-                        <div className="flex gap-1 h-2">
-                          <div 
-                            className="bg-man"
-                            style={{ width: `${menPerc}%` }}
-                          />
-                          <div 
-                            className="bg-woman"
-                            style={{ width: `${womenPerc}%` }}
-                          />
-                        </div>
-                        <div className="flex gap-4 text-xs font-outfit">
-                          <span style={{ color: '#002FA7' }}>{milestone.men_at_milestone} Men</span>
-                          <span style={{ color: '#FF4500' }}>{milestone.women_at_milestone} Women</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  
-                  {stats.total_queries > 0 && (
-                    <div className="pt-4 border-t-2 border-current">
-                      <div className="text-sm font-outfit text-muted-foreground">
-                        Next milestone: <span className="font-bold">{(Math.floor(stats.total_queries / 100000) + 1) * 100000}</span>
-                      </div>
-                      <div className="mt-2 h-2 bg-muted rounded-none overflow-hidden">
-                        <div 
-                          className="h-full bg-foreground"
-                          style={{ 
-                            width: `${((stats.total_queries % 100000) / 100000) * 100}%`
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
+                <div>
+                  <div className="flex justify-between text-sm font-outfit mb-2">
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="font-bold">
+                      {Math.round(((stats.total_queries % 100000) / 100000) * 100)}%
+                    </span>
+                  </div>
+                  <div className="h-4 bg-muted rounded-none overflow-hidden border-2 border-current">
+                    <div 
+                      className="h-full bg-foreground transition-all duration-500"
+                      style={{ 
+                        width: `${((stats.total_queries % 100000) / 100000) * 100}%`
+                      }}
+                    />
+                  </div>
                 </div>
-              </motion.div>
-            )}
+                
+                <div className="pt-4 border-t-2 border-current">
+                  <div className="text-sm font-outfit text-muted-foreground">
+                    <span className="font-bold text-foreground">
+                      <CountUp end={100000 - (stats.total_queries % 100000)} duration={1} separator="," />
+                    </span> queries until next milestone
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
 
