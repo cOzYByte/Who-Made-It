@@ -75,14 +75,16 @@ async def analyze_invention(query: QueryInput):
             
             Respond in this EXACT JSON format:
             {
-                "result": "man" or "woman",
+                "result": "man" or "woman" or "natural",
                 "creator_name": "Full name of the creator",
                 "category": "Category (e.g., Technology, Medicine, Literature, Science, etc.)",
                 "explanation": "Brief 1-2 sentence explanation"
             }
             
-            If multiple people were involved, mention the primary inventor/creator.
-            If the gender cannot be determined or it's a collective work, use "unknown" for result."""
+            IMPORTANT: 
+            - If the item is a natural phenomenon, natural resource, or something found in nature (not invented/created by humans), use "natural" for result.
+            - If multiple people were involved, mention the primary inventor/creator.
+            - If the gender cannot be determined or it's a collective work, use "unknown" for result."""
         ).with_model("openai", "gpt-5.2")
         
         user_message = UserMessage(
