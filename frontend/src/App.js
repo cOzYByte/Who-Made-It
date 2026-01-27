@@ -16,14 +16,12 @@ function App() {
   const [stats, setStats] = useState({ total_queries: 0, men_count: 0, women_count: 0, milestones: [] });
   const [categories, setCategories] = useState([]);
   const [recentQueries, setRecentQueries] = useState([]);
-  const [milestones, setMilestones] = useState([]);
   const [showFlash, setShowFlash] = useState(false);
 
   useEffect(() => {
     fetchStats();
     fetchCategories();
     fetchRecentQueries();
-    fetchMilestones();
   }, []);
 
   const fetchStats = async () => {
