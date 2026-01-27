@@ -203,33 +203,32 @@ async def get_queries(limit: int = 50):
 
 @api_router.get("/categories", response_model=List[CategoryStats])
 async def get_categories():
-    queries = await db.queries.find({}, {"_id": 0, "category": 1, "result": 1}).to_list(1000)
+    # Use MongoDB aggregation pipeline for better performance
+    pipeline = [
+        {"$match": {"category": {"$exists": True}, "result": {"$in": ["man", "woman"]}}},
+        {"$group": {
+            "_id": "$category",
+            "count": {"$sum": 1},
+            "men_count": {"$sum": {"$cond": [{"$eq": ["$result", "man"]}, 1, 0]}},
+            "women_count": {"$sum": {"$cond": [{"$eq": ["$result", "woman"]}, 1, 0]}}
+        }},
+        {"$sort": {"count": -1}},
+        {"$limit": 20}
+    ]
     
-    category_map = {}
-    for query in queries:
-        category = query.get('category', 'General')
-        result = query.get('result', 'unknown')
-        
-        if category not in category_map:
-            category_map[category] = {"count": 0, "men_count": 0, "women_count": 0}
-        
-        category_map[category]['count'] += 1
-        if result == 'man':
-            category_map[category]['men_count'] += 1
-        elif result == 'woman':
-            category_map[category]['women_count'] += 1
+    results = await db.queries.aggregate(pipeline).to_list(20)
     
     category_stats = [
         CategoryStats(
-            category=cat,
-            count=stats['count'],
-            men_count=stats['men_count'],
-            women_count=stats['women_count']
+            category=result['_id'],
+            count=result['count'],
+            men_count=result['men_count'],
+            women_count=result['women_count']
         )
-        for cat, stats in category_map.items()
+        for result in results
     ]
     
-    return sorted(category_stats, key=lambda x: x.count, reverse=True)
+    return category_stats
 
 
 @api_router.get("/milestones", response_model=List[Milestone])
