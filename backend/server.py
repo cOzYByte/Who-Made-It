@@ -182,7 +182,8 @@ async def get_stats():
     return GlobalStats(
         total_queries=stats.get('total_queries', 0),
         men_count=stats.get('men_count', 0),
-        women_count=stats.get('women_count', 0)
+        women_count=stats.get('women_count', 0),
+        milestones=stats.get('milestones', [])
     )
 
 
