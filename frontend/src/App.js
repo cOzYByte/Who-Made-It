@@ -51,15 +51,6 @@ function App() {
     }
   };
 
-  const fetchMilestones = async () => {
-    try {
-      const response = await axios.get(`${API}/milestones`);
-      setMilestones(response.data);
-    } catch (error) {
-      console.error("Error fetching milestones:", error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) {
