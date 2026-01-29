@@ -72,42 +72,55 @@ async def root():
 @api_router.post("/analyze", response_model=QueryResult)
 async def analyze_invention(query: QueryInput):
     try:
-        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        api_key = os.environ.get('OPENAI_API_KEY')
         if not api_key:
-            raise HTTPException(status_code=500, detail="API key not configured")
+            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
         
-        chat = LlmChat(
-            api_key=api_key,
-            session_id=str(uuid.uuid4()),
-            system_message="""You are a knowledgeable historian analyzing inventions, products, and services.
-            When given an item, determine who created/invented it (man or woman), provide the creator's name, 
-            a category for the item, and a brief explanation.
-            
-            Respond in this EXACT JSON format:
-            {
-                "result": "man" or "woman" or "natural",
-                "creator_name": "Full name of the creator",
-                "category": "Category (e.g., Technology, Medicine, Literature, Science, etc.)",
-                "explanation": "Brief 1-2 sentence explanation"
-            }
-            
-            IMPORTANT: 
-            - If the item is a natural phenomenon, natural resource, plant, animal, mineral, element, or ANYTHING found in nature (not invented/created by humans), use "natural" for result. Examples: water, oxygen, trees, gold, diamonds, berries, sunlight, wind, etc.
-            - Only use "man" or "woman" for human-made inventions, products, or creations.
-            - If multiple people were involved, mention the primary inventor/creator and still use "man" or "woman" based on their gender.
-            - If the gender cannot be determined, default to "natural" if it's from nature, otherwise use the best guess based on historical records."""
-        ).with_model("openai", "gpt-5.2")
+        client = AsyncOpenAI(api_key=api_key)
         
-        user_message = UserMessage(
-            text=f"Who invented/created: {query.input_text}?"
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """You are a knowledgeable historian analyzing inventions, products, and services.
+When given an item, determine who created/invented it (man or woman), provide the creator's name, 
+a category for the item, and a brief explanation.
+
+Respond in this EXACT JSON format:
+{
+    "result": "man" or "woman" or "natural",
+    "creator_name": "Full name of the creator",
+    "category": "Category (e.g., Technology, Medicine, Literature, Science, etc.)",
+    "explanation": "Brief 1-2 sentence explanation"
+}
+
+IMPORTANT: 
+- If the item is a natural phenomenon, natural resource, plant, animal, mineral, element, or ANYTHING found in nature (not invented/created by humans), use "natural" for result. Examples: water, oxygen, trees, gold, diamonds, berries, sunlight, wind, etc.
+- Only use "man" or "woman" for human-made inventions, products, or creations.
+- If multiple people were involved, mention the primary inventor/creator and still use "man" or "woman" based on their gender.
+- If the gender cannot be determined, default to "natural" if it's from nature, otherwise use the best guess based on historical records."""
+                },
+                {
+                    "role": "user",
+                    "content": f"Who invented/created: {query.input_text}?"
+                }
+            ],
+            response_format={"type": "json_object"}
         )
-        
-        response = await chat.send_message(user_message)
         
         import json
         try:
-            response_data = json.loads(response)
+            response_data = json.loads(response.choices[0].message.content)
             result = response_data.get('result', 'unknown').lower()
+            creator_name = response_data.get('creator_name', 'Unknown')
+            category = response_data.get('category', 'General')
+            explanation = response_data.get('explanation', '')
+        except:
+            result = 'unknown'
+            creator_name = 'Unknown'
+            category = 'General'
+            explanation = response.choices[0].message.content
             creator_name = response_data.get('creator_name', 'Unknown')
             category = response_data.get('category', 'General')
             explanation = response_data.get('explanation', '')
