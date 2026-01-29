@@ -121,14 +121,6 @@ IMPORTANT:
             creator_name = 'Unknown'
             category = 'General'
             explanation = response.choices[0].message.content
-            creator_name = response_data.get('creator_name', 'Unknown')
-            category = response_data.get('category', 'General')
-            explanation = response_data.get('explanation', '')
-        except:
-            result = 'unknown'
-            creator_name = 'Unknown'
-            category = 'General'
-            explanation = response
         
         query_result = QueryResult(
             input_text=query.input_text,
