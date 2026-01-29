@@ -31,7 +31,12 @@ dist/
 dist
 
 # Environment files (comprehensive coverage)
-# Note: .env files are tracked for Emergent deployment
+# Note: .env files contain secrets and should not be committed
+backend/.env
+frontend/.env
+.env
+.env.local
+.env.*.local
 
 *token.json*
 *credentials.json*
