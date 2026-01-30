@@ -72,55 +72,59 @@ async def root():
 @api_router.post("/analyze", response_model=QueryResult)
 async def analyze_invention(query: QueryInput):
     try:
-        api_key = os.environ.get('OPENAI_API_KEY')
+        api_key = os.environ.get('GEMINI_API_KEY')
         if not api_key:
-            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+            raise HTTPException(status_code=500, detail="Gemini API key not configured")
         
-        client = AsyncOpenAI(api_key=api_key)
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
-        response = await client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": """You are a knowledgeable historian analyzing inventions, products, and services.
+        prompt = f"""You are a knowledgeable historian analyzing inventions, products, and services.
 When given an item, determine who created/invented it (man or woman), provide the creator's name, 
 a category for the item, and a brief explanation.
 
 Respond in this EXACT JSON format:
-{
+{{
     "result": "man" or "woman" or "natural",
     "creator_name": "Full name of the creator",
     "category": "Category (e.g., Technology, Medicine, Literature, Science, etc.)",
     "explanation": "Brief 1-2 sentence explanation"
-}
+}}
 
 IMPORTANT: 
 - If the item is a natural phenomenon, natural resource, plant, animal, mineral, element, or ANYTHING found in nature (not invented/created by humans), use "natural" for result. Examples: water, oxygen, trees, gold, diamonds, berries, sunlight, wind, etc.
 - Only use "man" or "woman" for human-made inventions, products, or creations.
 - If multiple people were involved, mention the primary inventor/creator and still use "man" or "woman" based on their gender.
-- If the gender cannot be determined, default to "natural" if it's from nature, otherwise use the best guess based on historical records."""
-                },
-                {
-                    "role": "user",
-                    "content": f"Who invented/created: {query.input_text}?"
-                }
-            ],
-            response_format={"type": "json_object"}
-        )
+- If the gender cannot be determined, default to "natural" if it's from nature, otherwise use the best guess based on historical records.
+
+Who invented/created: {query.input_text}?
+
+Respond ONLY with the JSON object, no other text."""
+        
+        response = model.generate_content(prompt)
         
         import json
         try:
-            response_data = json.loads(response.choices[0].message.content)
+            # Extract JSON from response
+            response_text = response.text.strip()
+            # Remove markdown code blocks if present
+            if response_text.startswith('```'):
+                response_text = response_text.split('```')[1]
+                if response_text.startswith('json'):
+                    response_text = response_text[4:]
+            response_text = response_text.strip()
+            
+            response_data = json.loads(response_text)
             result = response_data.get('result', 'unknown').lower()
             creator_name = response_data.get('creator_name', 'Unknown')
             category = response_data.get('category', 'General')
             explanation = response_data.get('explanation', '')
-        except:
+        except Exception as e:
+            logging.error(f"Error parsing Gemini response: {e}")
             result = 'unknown'
             creator_name = 'Unknown'
             category = 'General'
-            explanation = response.choices[0].message.content
+            explanation = response.text if response.text else 'Unable to analyze'
         
         query_result = QueryResult(
             input_text=query.input_text,
