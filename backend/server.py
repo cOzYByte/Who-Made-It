@@ -16,11 +16,11 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
-# Configure SSL for MongoDB Atlas connection with proper certificates
-import certifi
+# MongoDB connection with proper SSL configuration for Render
 client = AsyncIOMotorClient(
     mongo_url,
-    tlsCAFile=certifi.where()
+    tls=True,
+    tlsAllowInvalidHostnames=True
 )
 db = client[os.environ['DB_NAME']]
 
