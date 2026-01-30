@@ -19,35 +19,72 @@ function App() {
   const [showFlash, setShowFlash] = useState(false);
 
   useEffect(() => {
-    fetchStats();
-    fetchCategories();
-    fetchRecentQueries();
+    // Fetch data with longer timeout for cold start
+    const fetchAllData = async () => {
+      try {
+        await Promise.all([
+          fetchStats(),
+          fetchCategories(),
+          fetchRecentQueries()
+        ]);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      }
+    };
+    fetchAllData();
   }, []);
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API}/stats`);
+      const response = await axios.get(`${API}/stats`, { timeout: 60000 }); // 60 second timeout for cold start
       setStats(response.data);
     } catch (error) {
       console.error("Error fetching stats:", error);
+      // Retry once after delay if it fails (cold start)
+      setTimeout(async () => {
+        try {
+          const response = await axios.get(`${API}/stats`, { timeout: 60000 });
+          setStats(response.data);
+        } catch (retryError) {
+          console.error("Retry failed:", retryError);
+        }
+      }, 2000);
     }
   };
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${API}/categories`);
+      const response = await axios.get(`${API}/categories`, { timeout: 60000 });
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
+      // Retry once
+      setTimeout(async () => {
+        try {
+          const response = await axios.get(`${API}/categories`, { timeout: 60000 });
+          setCategories(response.data);
+        } catch (retryError) {
+          console.error("Retry failed:", retryError);
+        }
+      }, 2000);
     }
   };
 
   const fetchRecentQueries = async () => {
     try {
-      const response = await axios.get(`${API}/queries?limit=10`);
+      const response = await axios.get(`${API}/queries?limit=10`, { timeout: 60000 });
       setRecentQueries(response.data);
     } catch (error) {
       console.error("Error fetching recent queries:", error);
+      // Retry once
+      setTimeout(async () => {
+        try {
+          const response = await axios.get(`${API}/queries?limit=10`, { timeout: 60000 });
+          setRecentQueries(response.data);
+        } catch (retryError) {
+          console.error("Retry failed:", retryError);
+        }
+      }, 2000);
     }
   };
 
