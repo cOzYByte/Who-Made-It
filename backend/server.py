@@ -20,8 +20,7 @@ mongo_url = os.environ['MONGO_URL']
 import ssl
 client = AsyncIOMotorClient(
     mongo_url,
-    tlsAllowInvalidCertificates=True,
-    ssl_cert_reqs=ssl.CERT_NONE
+    tlsAllowInvalidCertificates=True
 )
 db = client[os.environ['DB_NAME']]
 
