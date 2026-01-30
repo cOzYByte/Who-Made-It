@@ -77,7 +77,7 @@ async def analyze_invention(query: QueryInput):
             raise HTTPException(status_code=500, detail="Gemini API key not configured")
         
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
         
         prompt = f"""You are a knowledgeable historian analyzing inventions, products, and services.
 When given an item, determine who created/invented it (man or woman), provide the creator's name, 
